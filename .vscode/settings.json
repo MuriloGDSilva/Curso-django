@@ -60,6 +60,6 @@
   },
   "workbench.iconTheme": "material-icon-theme",
   "git.enableSmartCommit": true,
-  "workbench.colorTheme": "Dracula",
+  "workbench.colorTheme": "Dracula Soft",
   "explorer.compactFolders": false
 }

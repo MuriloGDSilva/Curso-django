@@ -61,5 +61,6 @@
   "workbench.iconTheme": "material-icon-theme",
   "git.enableSmartCommit": true,
   "workbench.colorTheme": "Dracula Soft",
-  "explorer.compactFolders": false
+  "explorer.compactFolders": false,
+  "python.formatting.provider": "none"
 }

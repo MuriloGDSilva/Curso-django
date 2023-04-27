@@ -2,6 +2,7 @@
 from django.urls import reverse, resolve
 from recipes import views
 from .test_recipe_base import RecipeTestBase
+from unittest.mock import patch
 
 
 class RecipeSearchViewTest(RecipeTestBase):
@@ -46,3 +47,19 @@ class RecipeSearchViewTest(RecipeTestBase):
 
         self.assertIn(recipe1, response_both.context['recipes'])
         self.assertIn(recipe2, response_both.context['recipes'])
+
+    @patch('recipes.views.PER_PAGE', new=9)
+    def test_recipe_search_paginated_correct(self):
+        for r in range(18):
+            kwargs = {'slug': f's-{r}',
+                      'author_data': {'username': f'u{r}'},
+                      'title': 'TestTitle'}
+            self.make_recipe(**kwargs)
+
+        response = self.client.get(reverse('recipes:search') + '?q=TestTitle')
+        recipe = response.context['recipes']
+        paginator = recipe.paginator
+
+        self.assertEqual(paginator.num_pages, 2)
+        self.assertEqual(len(paginator.get_page(1)), 9)
+        self.assertEqual(len(paginator.get_page(2)), 9)

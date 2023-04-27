@@ -3,6 +3,7 @@ from .models import Recipe
 from django.http.response import Http404
 from django.db.models import Q
 from recipes.utils.pagination import make_pagination
+
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 9))

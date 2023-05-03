@@ -1,10 +1,40 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+import re
+
+
+def strong_password(password):
+    regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[1-9]).{8,}$')
+
+    if not regex.match(password):
+        raise ValidationError((
+            'Password must have at last one uppercase letter, '
+            'one lowercase letter and one number. The lenght should be '
+            'at least 8 characters.'),
+
+            code='invalid'
+        )
 
 
 class RegisterForm(forms.ModelForm):
 
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput,
+        validators=[strong_password],
+    )
+
+    password2 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Repeat your password'
+        }),
+        label='Password'
+    )
+
     class Meta:
+
         model = User
         fields = ['first_name', 'last_name',
                   'username', 'email', 'password']
@@ -32,9 +62,6 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': ' Type your username here'
             }),
 
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Type your password here'
-            }),
 
             'email': forms.EmailInput(attrs={
                 'placeholder': 'Type your E-mail here'
@@ -48,3 +75,14 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your Last name here'
             }),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password != password2:
+            raise ValidationError({
+                'password': 'You entered different passwords',
+                'password2': 'You entered different passwords'
+            })

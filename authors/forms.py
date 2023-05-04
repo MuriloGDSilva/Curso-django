@@ -72,7 +72,23 @@ class RegisterForm(forms.ModelForm):
         label='E-mail',
         error_messages={
             'required': 'This field must not be empty'
-        }
+        },
+        help_text='The e-mail must be valid.'
+    )
+
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Type your username here'
+        }),
+        label='Username',
+        error_messages={
+            'required': 'This field must not be empty',
+            'min_length': 'Your username must be at least 4 characters long',
+            'max_length': 'Your username can be a maximum of 150 characters',
+        },
+        help_text=('Username must have letters, numbers or one of those @.+-_'
+                   'The lenght should between 4 and 150 characters.'),
+        min_length=4, max_length=150,
     )
 
     class Meta:
@@ -80,30 +96,6 @@ class RegisterForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name',
                   'username', 'email', 'password']
-
-        labels = {
-            'username': 'Username',
-        }
-
-        error_messages = {
-            'username': {
-                'required': 'This field must not be empty'
-            },
-
-        }
-
-        widgets = {
-            'username': forms.TextInput(attrs={
-                'placeholder': 'Type your username here'
-            }),
-
-
-
-        }
-
-        help_texts = {
-            'email': 'The e-mail must be valid.'
-        }
 
     def clean(self):
         cleaned_data = super().clean()

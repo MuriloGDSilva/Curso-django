@@ -21,8 +21,14 @@ class RegisterForm(forms.ModelForm):
 
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Type your password'
+        }),
         validators=[strong_password],
+        label='Password',
+        error_messages={
+            'required': 'This field must not be empty'
+        }
     )
 
     password2 = forms.CharField(
@@ -30,7 +36,43 @@ class RegisterForm(forms.ModelForm):
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Repeat your password'
         }),
-        label='Password'
+        label='Password',
+        error_messages={
+            'required': 'This field must not be empty'
+        }
+    )
+
+    first_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Type your First name here',
+        }),
+        label='First Name',
+        error_messages={
+            'required': 'This field must not be empty'
+        }
+    )
+
+    last_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Type your Last name here',
+        }),
+        label='Last Name',
+        error_messages={
+            'required': 'This field must not be empty'
+        }
+    )
+
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Type your E-mail here'
+        }),
+        label='E-mail',
+        error_messages={
+            'required': 'This field must not be empty'
+        }
     )
 
     class Meta:
@@ -40,11 +82,7 @@ class RegisterForm(forms.ModelForm):
                   'username', 'email', 'password']
 
         labels = {
-            'username': ' Username',
-            'first_name': 'First Name',
-            'last_name': 'Last Name',
-            'email': ' E-mail',
-            'password': 'Password',
+            'username': 'Username',
         }
 
         error_messages = {
@@ -52,28 +90,19 @@ class RegisterForm(forms.ModelForm):
                 'required': 'This field must not be empty'
             },
 
-            'password': {
-                'required': 'This field must not be empty'
-            }
         }
 
         widgets = {
             'username': forms.TextInput(attrs={
-                'placeholder': ' Type your username here'
+                'placeholder': 'Type your username here'
             }),
 
 
-            'email': forms.EmailInput(attrs={
-                'placeholder': 'Type your E-mail here'
-            }),
 
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'Type your First name here'
-            }),
+        }
 
-            'last_name': forms.TextInput(attrs={
-                'placeholder': 'Type your Last name here'
-            }),
+        help_texts = {
+            'email': 'The e-mail must be valid.'
         }
 
     def clean(self):

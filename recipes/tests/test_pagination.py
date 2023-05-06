@@ -1,5 +1,5 @@
 
-from django.urls import reverse, resolve
+from django.urls import reverse
 from .test_recipe_base import RecipeTestBase
 from recipes.utils.pagination import make_pagination_range
 
@@ -95,3 +95,14 @@ class PaginationTest(RecipeTestBase):
             current_page=21,
         )['pagination']
         self.assertEqual([17, 18, 19, 20], pagination)
+
+    def test_pagination_does_not_accept_wrong_value_and_returns_page_1(self):
+        for r in range(18):
+            kwargs = {'slug': f's-{r}',
+                      'author_data': {'username': f'u{r}'}}
+            self.make_recipe(**kwargs)
+
+        response = self.client.get(reverse('recipes:home') + '?page=a')
+        curent_page = response.context['recipes'].number
+
+        self.assertEqual(curent_page, 1)

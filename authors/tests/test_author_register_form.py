@@ -119,3 +119,9 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         msg = 'You entered different passwords'
 
         self.assertNotIn(msg, response.content.decode('utf-8'))
+
+    def test_if_form_in_the_method_get_returns_404(self):
+        self.form_data
+        url = reverse('authors:create')
+        response = self.client.get(url, self.form_data)
+        self.assertEqual(response.status_code, 404)

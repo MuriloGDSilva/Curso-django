@@ -3,6 +3,18 @@ from recipes.models import Recipe, Category, User
 
 
 class RecipeMixin:
+
+    def make_recipe_bacth(self, qtd):
+        recipes = []
+        for r in range(qtd):
+            kwargs = {
+                'title': f'Title-Recipe-Test{r}',
+                'slug': f's-{r}',
+                'author_data': {'username': f'u{r}'}}
+            recipe = self.make_recipe(**kwargs)
+            recipes.append(recipe)
+        return recipes
+
     def make_category(self, name='categoria'):
         return Category.objects.create(name='name')
 

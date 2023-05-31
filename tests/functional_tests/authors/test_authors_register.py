@@ -1,25 +1,10 @@
 from .base import AuthorsBaseTest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from django.contrib.auth.models import User
 
 
 class AuthorsregisterTest(AuthorsBaseTest):
-
-    def setUp(self, *args, **kwargs):
-        self.form_data = {
-            'username': 'user',
-            'first_name': 'first',
-            'last_name': 'last',
-            'email': 'email@anyemail.com',
-            'password': 'Strongp@ssword',
-            'password2': 'Strongp@ssword',
-        }
-        return super().setUp(*args, **kwargs)
-
-    def get_by_placeholder(self, web_element, placeholder):
-        return web_element.find_element(
-            By.XPATH, f'//input[@placeholder="{placeholder}"]'
-        )
 
     def fill_form_dummy_data(self, form):
         fields = form.find_elements(By.TAG_NAME, 'input')
@@ -103,6 +88,32 @@ class AuthorsregisterTest(AuthorsBaseTest):
 
         self.assertIn(error_message, form.text)
         self.sleep(20)
+
+    def test_email_field_error_existing_email(self):
+
+        user = User.objects.create_user(
+            username='UserTester', 
+            email='Tester@email.com', 
+            password='P@ssWordStr0ng'
+        )
+        self.browser.get(self.live_server_url + '/authors/register/')
+
+        form = self.browser.find_element(
+            By.XPATH, '/html/body/main/div[2]/form'
+        )
+
+        self.fill_form_dummy_data(form)
+        form.find_element(By.NAME, 'email').send_keys(user.email)
+
+        form.submit()
+
+        form = self.browser.find_element(
+            By.XPATH, '/html/body/main/div[2]/form'
+        )
+
+        self.assertIn('User e-mail is already in use', form.text)
+
+        self.sleep(10)
 
     def test_register_created_with_sucsess(self):
 

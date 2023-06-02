@@ -389,6 +389,11 @@ h6 {
 }
 /*Messages*/
 
+
+.login_message {
+    margin: 1rem 0;
+}
+
 .messages-container {
     display: flex;
     flex-flow: column nowrap;
@@ -443,4 +448,23 @@ h6 {
     .main-content-list , .form-content-grid{
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
+}
+
+.authors-dashboard-container {
+    max-width:64rem;
+    padding: var(--spacing-gutter-medium);
+    text-align: left;
+    margin: 0 auto;
+
+}
+
+.authors-dashboard-container h3,
+.authors-dashboard-container p,
+.authors-dashboard-container a,
+.authors-dashboard-container li,
+.authors-dashboard-container ul {
+    list-style-type: none;
+    margin: 1rem 0;
+    color: var(--color-dark-text);
+
 }

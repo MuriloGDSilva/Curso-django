@@ -131,4 +131,5 @@ def dashboard_recipe_edit(request, id):
                   context={
                       'recipe': recipe,
                       'form': form
-                  })
+                  }
+                  )

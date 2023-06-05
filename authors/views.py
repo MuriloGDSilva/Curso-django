@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from authors.forms.recipe_dashboard_form import AuthorRecipeForm
 from .forms import RegisterForm, LoginForm
 from django.http import Http404
 from django.contrib import messages
@@ -102,12 +103,32 @@ def dashboard_recipe_edit(request, id):
         is_published=False,
         author=request.user,
         pk=id,
-    )
-    
+    ).first()
+
     if not recipe:
         raise Http404()
-    
+
+    form = AuthorRecipeForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        instance=recipe
+
+    )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request, 'Changes have been saved successfully')
+        return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)))
+
     return render(request, 'authors/pages/dashboard_recipe.html',
                   context={
                       'recipe': recipe,
+                      'form': form
                   })

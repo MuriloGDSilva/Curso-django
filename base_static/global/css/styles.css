@@ -69,6 +69,15 @@ h6 {
     font-family: var(--font-headings);
 }
 
+img {
+    max-width: 100%;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
 .container {
     max-width: 144rem;
     margin: 0 auto;
@@ -302,6 +311,10 @@ h6 {
     text-align: center;
 }
 
+.left {
+    text-align: left;
+}
+
 .m-x {
     margin:0 var(--spacing-gutter-medium);
 }
@@ -349,7 +362,9 @@ h6 {
     list-style-type: none;
 }
 
-.form-content input {
+.form-content input,
+.form-content textarea,
+.form-content select {
     width: 100%;
     padding: 1rem;
     border-radius: .4rem;
@@ -386,6 +401,10 @@ h6 {
 
 .form-inline {
     display: inline;
+}
+
+.span-2 {
+    grid-column: span 2;
 }
 /*Messages*/
 

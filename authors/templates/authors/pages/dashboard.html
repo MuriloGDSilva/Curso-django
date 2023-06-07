@@ -20,11 +20,17 @@
                     {%empty%}
                         <li>
                             <p>
-                                You do not have recipes, please create one.
+                                You do not have recipes, Click here for
+                                <a href="{% url 'authors:dashboard_recipe_create' %}">
+                                    create one.
+                                </a>
                             </p>
                         </li>
                 {% endfor %}
             </ul>
+            <a href="{% url 'authors:dashboard_recipe_create' %}">
+                <button>Create Recipe</button>
+            </a>
         </div>
     </div>
 

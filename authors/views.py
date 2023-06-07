@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from authors.forms.recipe_dashboard_form import AuthorRecipeForm
+from authors.forms.recipe_dashboard_create_form import DashboardCreateRecipeForm
 from .forms import RegisterForm, LoginForm
 from django.http import Http404
 from django.contrib import messages
@@ -133,3 +134,27 @@ def dashboard_recipe_edit(request, id):
                       'form': form
                   }
                   )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_create(request):
+
+    form = DashboardCreateRecipeForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+        messages.success(request, 'Your recipe has been created successfully')
+
+    return render(request, 'authors/pages/dashboard_recipe_create.html',
+                  context={
+                      'form': form
+                  })

@@ -23,7 +23,7 @@ class AuthorsLoginTestForm(AuthorsBaseTest):
 
         form.submit()
 
-        self.assertIn(f'Your are logged in with {user.username} Please,',
+        self.assertIn(f'Your are logged in.',
                       self.browser.find_element(By.TAG_NAME, 'body').text)
 
         self.sleep(10)

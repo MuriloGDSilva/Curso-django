@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from authors.forms.recipe_dashboard_create_form import DashboardCreateRecipeForm
 from authors.forms import RegisterForm, LoginForm
 from django.http import Http404
 from django.contrib import messages
@@ -97,50 +96,3 @@ def dashboard_view(request):
                   })
 
 
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_create(request):
-
-    form = DashboardCreateRecipeForm(
-        data=request.POST or None,
-        files=request.FILES or None,
-    )
-
-    if form.is_valid():
-        recipe = form.save(commit=False)
-
-        recipe.author = request.user
-        recipe.preparation_steps_is_html = False
-        recipe.is_published = False
-
-        recipe.save()
-        messages.success(request, 'Your recipe has been created successfully')
-        return redirect(reverse('authors:dashboard_recipe_edit',
-                                kwargs={'id': recipe.id}))
-
-    return render(request, 'authors/pages/dashboard_recipe_create.html',
-                  context={
-                      'form': form
-                  })
-
-
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_delete(request):
-
-    if not request.POST:
-        raise Http404()
-
-    POST = request.POST
-    id = POST.get('id')
-
-    recipe = Recipe.objects.filter(
-        is_published=False,
-        author=request.user,
-        pk=id,
-    ).first()
-
-    if not recipe:
-        raise Http404()
-
-    recipe.delete()
-    messages.success(request, 'Deleted successfully')
-    return redirect(reverse('authors:dashboard'))

@@ -28,7 +28,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
                       (By.CLASS_NAME, "main-content-list").text)
         self.sleep(2)
 
-    @patch('recipes.views.PER_PAGE', new=2)
+    @patch('recipes.views.recipe_list_view_base.PER_PAGE',new=2)
     def test_recipe_home_pagination(self):
         self.make_recipe_bacth(10)
 

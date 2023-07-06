@@ -6,7 +6,7 @@ from recipes.tests.test_recipe_base import RecipeMixin
 
 class RecipeBaseFunctionalTest(StaticLiveServerTestCase, RecipeMixin):
     def setUp(self) -> None:
-        self.browser = make_chrome_browser()
+        self.browser = make_chrome_browser('--headless')
         return super().setUp()
 
     def tearDown(self) -> None:
